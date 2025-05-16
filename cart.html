@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Giỏ hàng</title>
+  <style>
+    table { 
+      width: 100%; border-collapse: collapse; margin-top: 20px; 
+    }
+    th, td { 
+      padding: 10px; border: 3px solid #171515; text-align: center;
+      color:rgb(16, 16, 16);
+    }
+    img { 
+      max-width: 80px; height: auto; 
+    }
+    button { 
+      padding: 6px 12px; background: crimson; color: rgb(21, 19, 19); border: none; cursor: pointer;
+     }
+    button:hover { 
+      background: darkred; 
+    }
+    .total { 
+      text-align: right; font-weight: bold; margin-top: 20px; 
+    }
+    body { 
+           
+         
+           background-size: cover; 
+           background-repeat: no-repeat; 
+           background-position: center; 
+           font-family: Arial, sans-serif; padding: 20px; margin: 0; 
+       }
+        h1{
+            font-family: 'Times New Roman', Times, serif;
+            color:rgb(11, 12, 12);
+            font-size: 30px;
+            text-align: center;
+        }
+        p{
+            font-family: 'Times New Roman', Times, serif;
+            color:rgb(14, 15, 15);
+            font-size: larger;
+
+        }
+       nav { 
+           background-color: #2f2c2c; padding: 10px; display: flex; justify-content: space-between; align-items: center; border-radius: 10px; 
+       }
+
+       ul { 
+           list-style: none; margin: 0; padding: 0; display: flex; 
+       }
+       li { 
+           margin-right: 20px; position: relative; 
+       }
+       a { 
+           color: white; text-decoration: none; font-size: 18px; padding: 8px 12px;
+        }
+       a:hover { 
+           background-color: #0056b3; border-radius: 5px; 
+       }
+       .dropdown { 
+           display: none; position: absolute; background: rgb(129, 127, 127); box-shadow: 0 0 5px #aaa; 
+       }
+       .dropdown a { 
+           display: block; color: rgb(238, 235, 235); padding: 8px; 
+       }
+       .dropdown a:hover { 
+           background-color: #958d8d; 
+       }
+       li:hover .dropdown { 
+           display: block; 
+       }
+       .sub-dropdown { 
+           display: none; position: absolute; left: 100%; top: 0; background: rgb(133, 130, 130); box-shadow: 0 0 5px #aaa; 
+       }
+       .dropdown li:hover .sub-dropdown { 
+           display: block; 
+       }
+     
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+        <li><a href="index.html">Trang chủ</a></li>
+        <li><a href="introduction.html">Giới thiệu</a></li>
+
+        <li>
+            <a href="#">Sản phẩm</a>
+            <ul class="dropdown">
+                <li><a href="#" onclick="filterCategory('featured')">Dụng cụ nổi bật</a></li>
+                <li><a href="#" onclick="filterCategory('yoga')">Dụng cụ Yoga</a></li>
+                <li>
+                    <a href="#">Môn thể thao ▾</a>
+                    <ul class="sub-dropdown">
+                        <li><a href="#" onclick="filterCategory('badminton')">Cầu lông</a></li>
+                        <li><a href="#" onclick="filterCategory('football')">Bóng đá</a></li>
+                        <li><a href="#" onclick="filterCategory('tabletennis')">Bóng bàn</a></li>
+                        <li><a href="#" onclick="filterCategory('volleyball')">Bóng chuyền</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li><a href="khuyenmai.html">Khuyến mãi</a></li>
+    <li><a href="lienhe.html">Liên hệ</a></li>
+    <ul class="nav-right">
+    <li class="cart-icon">
+        <div>
+            🛒 <a href="cart.html" onclick="showCart()">Giỏ hàng <span id="cart-count"></span></a>
+          </div>
+  </ul>
+  <li><a href="login.html">Đăng nhập</a></li>
+</nav>
+  <h1>Giỏ hàng của bạn 🛒</h1>
+  <table id="cart-table">
+    <thead>
+      <tr>
+        <th>Ảnh</th>
+        <th>Sản phẩm</th>
+        <th>Giá</th>
+        <th>Số lượng</th>
+        <th>Thành tiền</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <p class="total" id="total-price">Tổng cộng: 0đ</p> 
+  <a href="index.html" style="display: block; text-align: left; color:#171515">← Quay lại mua sắm</a>
+  <a href="login.html" style="display: block; text-align: right;color:#171515">Thanh toán</a>
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const tbody = document.querySelector("#cart-table tbody");
+    const totalPriceEl = document.getElementById("total-price");
+
+    function formatPrice(price) {
+      return price.toLocaleString() + "đ";
+    }
+
+    function renderCart() {
+      tbody.innerHTML = "";
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        const subtotal = item.price * item.quantity;
+        total += subtotal;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td><img src="${item.image}" alt="${item.name}"></td>
+          <td>${item.name}</td>
+          <td>${formatPrice(item.price)}</td>
+          <td>${item.quantity}</td>
+          <td>${formatPrice(subtotal)}</td>
+          <td><button onclick="removeItem(${index})">Xóa</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      totalPriceEl.textContent = "Tổng cộng: " + formatPrice(total);
+    }
+
+    function removeItem(index) {
+      if (confirm("Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?")) {
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+      }
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>

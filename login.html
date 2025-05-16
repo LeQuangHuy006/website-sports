@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Đăng nhập</title>
+    <style>
+     
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            transition: background 0.5s ease;
+        }
+
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 380px;
+            transition: all 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .page-title {
+            color: #333;
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title:after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, #002aff, #0091ff);
+            bottom: -8px;
+            left: 20%;
+            border-radius: 2px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background-color: #f9f9f9;
+        }
+
+        .input-group input:focus {
+            border-color: #002aff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 42, 255, 0.1);
+            background-color: #fff;
+        }
+
+        .input-group input::placeholder {
+            color: #aaa;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn {
+            background: linear-gradient(45deg, #002aff, #0091ff);
+            color: white;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(45deg, #001dbb, #0078d4);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 42, 255, 0.2);
+        }
+
+        .register-btn {
+            background: #333;
+            color: white;
+            margin-top: 15px;
+        }
+
+        .register-btn:hover {
+            background: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 25px 0;
+        }
+
+        .separator hr {
+            flex-grow: 1;
+            border: none;
+            height: 1px;
+            background-color: #e0e0e0;
+        }
+
+        .separator span {
+            color: #888;
+            padding: 0 15px;
+            font-size: 14px;
+        }
+
+        .forgot-password {
+            display: inline-block;
+            margin-top: 20px;
+            color: #0091ff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .forgot-password:hover {
+            color: #002aff;
+        }
+
+        .forgot-password:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #002aff;
+            transition: width 0.3s;
+        }
+
+        .forgot-password:hover:after {
+            width: 100%;
+        }
+
+        /* Form styles */
+        .form-container {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 5px;
+            margin-right: 10px;
+            width: auto;
+        }
+
+        .back-btn:hover {
+            color: #002aff;
+        }
+
+        .success-message, .error-message {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 15px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Password strength meter */
+        .password-strength {
+            height: 5px;
+            background-color: #eee;
+            margin-top: 5px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .strength-meter {
+            height: 100%;
+            width: 0;
+            transition: width 0.3s, background-color 0.3s;
+        }
+
+        .strength-text {
+            font-size: 12px;
+            text-align: left;
+            margin-top: 5px;
+            color: #888;
+        }
+        .avatar-upload {
+            position: relative;
+            margin: 0 auto 20px;
+            width: 100px;
+            height: 100px;
+        }
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #0091ff;
+            overflow: hidden;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f1f1f1;
+            color: #888;
+            font-size: 40px;
+        }
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .avatar-input {
+            display: none;
+        }
+
+        .avatar-upload label {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            background: #002aff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* User profile styles */
+        .profile-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 380px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .profile-header {
+            margin-bottom: 30px;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 3px solid #0091ff;
+            overflow: hidden;
+            background-color: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #888;
+            font-size: 50px;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .profile-username {
+            color: #888;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            display: flex;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .info-label {
+            font-weight: 500;
+            width: 100px;
+            color: #666;
+        }
+
+        .info-value {
+            flex: 1;
+            color: #333;
+        }
+
+        .logout-btn {
+            background: #f44336;
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.2);
+        }
+
+        .edit-profile-btn {
+            background: #002aff;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .edit-profile-btn:hover {
+            background: #001dbb;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 42, 255, 0.2);
+        }
+
+        /* Edit profile form */
+        .edit-profile-form {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Container đăng nhập -->
+    <div class="login-container" id="loginForm">
+        <h2 class="page-title" id="login-title">Đăng nhập</h2>
+        <form id="login-form">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Tên tài khoản, Email hoặc số điện thoại" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Mật khẩu" required>
+            </div>
+            <button type="submit" class="login-btn">Đăng Nhập Ngay</button>
+        </form>
+        <div class="separator">
+            <hr>
+            <span>hoặc</span>
+            <hr>
+        </div>
+        <button class="register-btn" id="showRegisterForm">Tạo tài khoản mới</button>
+        <a href="#" class="forgot-password" id="showForgotForm">Quên mật khẩu?</a>
+    </div>
+
+    <!-- Container đăng ký -->
+    <div class="login-container form-container" id="registerForm">
+        <div class="form-header">
+            <button class="back-btn" id="backToLogin">←</button>
+            <h2 class="page-title">Tạo tài khoản</h2>
+        </div>
+        <form id="register-form">
+            <div class="avatar-upload">
+                <div class="avatar-preview" id="avatarPreview">+</div>
+                <input type="file" id="avatarInput" class="avatar-input" accept="image/*">
+                <label for="avatarInput">📷</label>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="reg-fullname" placeholder="Họ và tên" required>
+            </div>
+            <div class="input-group">
+                <input type="email" id="reg-email" placeholder="Email" required>
+            </div>
+            <div class="input-group">
+                <input type="tel" id="reg-phone" placeholder="Số điện thoại" required>
+            </div>
+            <div class="input-group">
+                <input type="text" id="reg-username" placeholder="Tên đăng nhập" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="reg-password" placeholder="Mật khẩu" required>
+                <div class="password-strength">
+                    <div class="strength-meter" id="strength-meter"></div>
+                </div>
+                <div class="strength-text" id="strength-text">Độ mạnh: Chưa nhập</div>
+            </div>
+            <div class="input-group">
+                <input type="password" id="reg-confirm-password" placeholder="Xác nhận mật khẩu" required>
+            </div>
+            <div class="success-message" id="register-success">Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.</div>
+            <div class="error-message" id="register-error"></div>
+            <button type="submit" class="login-btn">Đăng Ký</button>
+        </form>
+    </div>
+
+    <!-- Container quên mật khẩu -->
+    <div class="login-container form-container" id="forgotForm">
+        <div class="form-header">
+            <button class="back-btn" id="backToLoginFromForgot">←</button>
+            <h2 class="page-title">Khôi phục mật khẩu</h2>
+        </div>
+        <form id="forgot-form">
+            <div class="input-group">
+                <input type="email" id="forgot-email" placeholder="Email" required>
+            </div>
+            <div class="success-message" id="forgot-success">Hướng dẫn đặt lại mật khẩu đã được gửi tới email của bạn.</div>
+            <div class="error-message" id="forgot-error"></div>
+            <button type="submit" class="login-btn">Gửi yêu cầu</button>
+        </form>
+    </div>
+     <!-- Container thông tin người dùng -->
+     <div class="profile-container" id="profileContainer">
+        <div class="profile-header">
+            <div class="profile-avatar" id="profileAvatar">
+                <span>U</span>
+            </div>
+            <h2 class="profile-name" id="profileName">Tên người dùng</h2>
+            <div class="profile-username" id="profileUsername">@username</div>
+        </div>
+        
+        <div class="profile-info">
+            <div class="info-item">
+                <div class="info-label">Email:</div>
+                <div class="info-value" id="profileEmail">email@example.com</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Điện thoại:</div>
+                <div class="info-value" id="profilePhone">0123456789</div>
+            </div>
+        </div>
+        
+        <button class="edit-profile-btn" id="editProfileBtn">Chỉnh sửa thông tin</button>
+        <button class="logout-btn" id="logoutBtn">Đăng xuất</button>
+        
+        <!-- Form chỉnh sửa thông tin -->
+        <form id="editProfileForm" class="edit-profile-form">
+            <div class="avatar-upload">
+                <div class="avatar-preview" id="editAvatarPreview">
+                    <span>+</span>
+                </div>
+                <label for="editAvatarInput">📷</label>
+                <input type="file" id="editAvatarInput" class="avatar-input" accept="image/*">
+            </div>
+            <div class="input-group">
+                <input type="text" id="edit-fullname" placeholder="Họ và tên" required>
+            </div>
+            <div class="input-group">
+                <input type="email" id="edit-email" placeholder="Email" required>
+            </div>
+            <div class="input-group">
+                <input type="tel" id="edit-phone" placeholder="Số điện thoại" required>
+            </div>
+            <div class="success-message" id="edit-success">Cập nhật thông tin thành công!</div>
+            <div class="error-message" id="edit-error"></div>
+            <button type="submit" class="login-btn">Lưu thay đổi</button>
+            <button id="cancelEditBtn" class="register-btn">Hủy</button>
+        </form>
+    </div>
+    <script>
+        // Lấy các phần tử DOM
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const forgotForm = document.getElementById('forgotForm');
+        const profileContainer = document.getElementById('profileContainer');
+        const editProfileForm = document.getElementById('editProfileForm');
+        const loginTitle = document.getElementById('login-title');
+
+        // Nút chuyển đổi form
+        const showRegisterBtn = document.getElementById('showRegisterForm');
+        const showForgotBtn = document.getElementById('showForgotForm');
+        const backToLoginBtn = document.getElementById('backToLogin');
+        const backToLoginFromForgotBtn = document.getElementById('backToLoginFromForgot');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+
+        // Form submission
+        const loginFormEl = document.getElementById('login-form');
+        const registerFormEl = document.getElementById('register-form');
+        const forgotFormEl = document.getElementById('forgot-form');
+        const editProfileFormEl = document.getElementById('editProfileForm');
+
+        // Messages
+        const registerSuccess = document.getElementById('register-success');
+        const registerError = document.getElementById('register-error');
+        const forgotSuccess = document.getElementById('forgot-success');
+        const forgotError = document.getElementById('forgot-error');
+        const editSuccess = document.getElementById('edit-success');
+        const editError = document.getElementById('edit-error');
+
+        // Password strength
+        const passwordInput = document.getElementById('reg-password');
+        const strengthMeter = document.getElementById('strength-meter');
+        const strengthText = document.getElementById('strength-text');
+         
+        // Avatar elements
+        const avatarInput = document.getElementById('avatarInput');
+        const avatarPreview = document.getElementById('avatarPreview');
+        const editAvatarInput = document.getElementById('editAvatarInput');
+        const editAvatarPreview = document.getElementById('editAvatarPreview');
+
+        // Profile elements
+        const profileAvatar = document.getElementById('profileAvatar');
+        const profileName = document.getElementById('profileName');
+        const profileUsername = document.getElementById('profileUsername');
+        const profileEmail = document.getElementById('profileEmail');
+        const profilePhone = document.getElementById('profilePhone');
+
+        // Lưu trữ tài khoản đăng ký (giả lập)
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        // Lưu trữ người dùng hiện tại
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+
+        // Kiểm tra đăng nhập khi tải trang
+        window.addEventListener('DOMContentLoaded', () => {
+            if (currentUser) {
+                showProfile();
+            } else {
+                showLoginForm();
+            }
+        });
+
+        // Xử lý upload avatar đăng ký
+        avatarInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    avatarPreview.innerHTML = `<img src="${e.target.result}" alt="Avatar">`;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Xử lý upload avatar khi chỉnh sửa
+        editAvatarInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    editAvatarPreview.innerHTML = `<img src="${e.target.result}" alt="Avatar">`;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Hiển thị form đăng nhập
+        function showLoginForm() {
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+            forgotForm.style.display = 'none';
+            profileContainer.style.display = 'none';
+            if (editProfileForm) editProfileForm.style.display = 'none';
+            loginTitle.textContent = currentUser ? currentUser.username : 'Đăng nhập';
+        }
+
+        // Hiển thị thông tin người dùng
+        function showProfile() {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'none';
+            forgotForm.style.display = 'none';
+            profileContainer.style.display = 'block';
+            editProfileForm.style.display = 'none';
+            
+            // Hiển thị thông tin người dùng
+            profileName.textContent = currentUser.fullname;
+            profileUsername.textContent = '@' + currentUser.username;
+            profileEmail.textContent = currentUser.email;
+            profilePhone.textContent = currentUser.phone;
+            
+            // Hiển thị avatar
+            if (currentUser.avatar) {
+                profileAvatar.innerHTML = `<img src="${currentUser.avatar}" alt="Avatar">`;
+            } else {
+                profileAvatar.innerHTML = `<span>${currentUser.fullname.charAt(0).toUpperCase()}</span>`;
+            }
+        }
+
+        // Chuyển đổi giữa các form
+        showRegisterBtn.addEventListener('click', () => {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            registerSuccess.style.display = 'none';
+            registerError.style.display = 'none';
+        });
+
+        showForgotBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginForm.style.display = 'none';
+            forgotForm.style.display = 'block';
+            forgotSuccess.style.display = 'none';
+            forgotError.style.display = 'none';
+        });
+
+        backToLoginBtn.addEventListener('click', () => {
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
+        });
+
+        backToLoginFromForgotBtn.addEventListener('click', () => {
+            forgotForm.style.display = 'none';
+            loginForm.style.display = 'block';
+        });
+
+        // Xử lý đăng xuất
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            showLoginForm();
+        });
+
+        // Xử lý hiển thị form chỉnh sửa
+        editProfileBtn.addEventListener('click', () => {
+            document.querySelector('.profile-header').style.display = 'none';
+            document.querySelector('.profile-info').style.display = 'none';
+            editProfileBtn.style.display = 'none';
+            logoutBtn.style.display = 'none';
+            editProfileForm.style.display = 'block';
+            
+            // Điền thông tin hiện tại vào form
+            document.getElementById('edit-fullname').value = currentUser.fullname;
+            document.getElementById('edit-email').value = currentUser.email;
+            document.getElementById('edit-phone').value = currentUser.phone;
+            
+            // Hiển thị avatar
+            if (currentUser.avatar) {
+                editAvatarPreview.innerHTML = `<img src="${currentUser.avatar}" alt="Avatar">`;
+            } else {
+                editAvatarPreview.innerHTML = `<span>${currentUser.fullname.charAt(0).toUpperCase()}</span>`;
+            }
+        });
+
+        // Hủy chỉnh sửa
+        cancelEditBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('.profile-header').style.display = 'block';
+            document.querySelector('.profile-info').style.display = 'block';
+            editProfileBtn.style.display = 'block';
+            logoutBtn.style.display = 'block';
+            editProfileForm.style.display = 'none';
+        });
+
+        // Xử lý form đăng nhập
+        loginFormEl.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            const user = users.find(u => (u.username === username || u.email === username || u.phone === username) && u.password === password);
+            
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                currentUser = user;
+                loginTitle.textContent = currentUser.username;
+                alert('Đăng nhập thành công!');
+                loginFormEl.reset();
+                showProfile();
+            } else {
+                alert('Tên đăng nhập hoặc mật khẩu không đúng!');
+            }
+        });
+
+        // Đánh giá độ mạnh mật khẩu
+        passwordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            let strength = 0;
+            let comments = '';
+            
+            if (password.length >= 8) strength += 25;
+            if (password.match(/[a-z]+/)) strength += 25;
+            if (password.match(/[A-Z]+/)) strength += 25;
+            if (password.match(/[0-9]+/)) strength += 12.5;
+            if (password.match(/[$@#&!]+/)) strength += 12.5;
+            
+            strengthMeter.style.width = strength + '%';
+            
+            if (strength < 25) {
+                strengthMeter.style.backgroundColor = '#ff4d4d';
+                comments = 'Rất yếu';
+            } else if (strength < 50) {
+                strengthMeter.style.backgroundColor = '#ffa64d';
+                comments = 'Yếu';
+            } else if (strength < 75) {
+                strengthMeter.style.backgroundColor = '#ffff4d';
+                comments = 'Trung bình';
+            } else if (strength < 100) {
+                strengthMeter.style.backgroundColor = '#4dff4d';
+                comments = 'Mạnh';
+            } else {
+                strengthMeter.style.backgroundColor = '#23ad23';
+                comments = 'Rất mạnh';
+            }
+            
+            strengthText.textContent = `Độ mạnh: ${comments}`;
+        });
+
+        // Xử lý form đăng ký
+        registerFormEl.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const fullname = document.getElementById('reg-fullname').value;
+            const email = document.getElementById('reg-email').value;
+            const phone = document.getElementById('reg-phone').value;
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+            const avatarImg = avatarPreview.querySelector('img');
+            const avatar = avatarImg ? avatarImg.src : null;
+            
+            registerSuccess.style.display = 'none';
+            registerError.style.display = 'none';
+            
+            if (password !== confirmPassword) {
+                registerError.textContent = 'Mật khẩu xác nhận không khớp!';
+                registerError.style.display = 'block';
+                return;
+            }
+            
+            if (users.some(u => u.username === username)) {
+                registerError.textContent = 'Tên đăng nhập đã tồn tại!';
+                registerError.style.display = 'block';
+                return;
+            }
+            
+            if (users.some(u => u.email === email)) {
+                registerError.textContent = 'Email đã được sử dụng!';
+                registerError.style.display = 'block';
+                return;
+            }
+            
+            const newUser = {
+                fullname,
+                email,
+                phone,
+                username,
+                password,
+                avatar
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            registerSuccess.style.display = 'block';
+            registerFormEl.reset();
+            avatarPreview.innerHTML = '<span>+</span>';
+            
+            setTimeout(() => {
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+            }, 3000);
+        });
+
+        // Xử lý form chỉnh sửa thông tin
+        editProfileFormEl.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const fullname = document.getElementById('edit-fullname').value;
+            const email = document.getElementById('edit-email').value;
+            const phone = document.getElementById('edit-phone').value;
+            const avatarImg = editAvatarPreview.querySelector('img');
+            const avatar = avatarImg ? avatarImg.src : currentUser.avatar;
+            
+            editSuccess.style.display = 'none';
+            editError.style.display = 'none';
+            
+            // Kiểm tra định dạng email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                editError.textContent = 'Vui lòng nhập email hợp lệ!';
+                editError.style.display = 'block';
+                return;
+            }
+            
+            // Kiểm tra định dạng số điện thoại
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(phone)) {
+                editError.textContent = 'Số điện thoại phải có 10 chữ số!';
+                editError.style.display = 'block';
+                return;
+            }
+            
+            // Kiểm tra email đã tồn tại chưa
+            if (email !== currentUser.email && users.some(u => u.email === email)) {
+                editError.textContent = 'Email đã được sử dụng!';
+                editError.style.display = 'block';
+                return;
+            }
+            
+            // Cập nhật thông tin người dùng hiện tại
+            currentUser.fullname = fullname;
+            currentUser.email = email;
+            currentUser.phone = phone;
+            currentUser.avatar = avatar;
+            
+            // Cập nhật trong danh sách người dùng
+            const userIndex = users.findIndex(u => u.username === currentUser.username);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            editSuccess.style.display = 'block';
+            
+            setTimeout(() => {
+                document.querySelector('.profile-header').style.display = 'block';
+                document.querySelector('.profile-info').style.display = 'block';
+                editProfileBtn.style.display = 'block';
+                logoutBtn.style.display = 'block';
+                editProfileForm.style.display = 'none';
+                editSuccess.style.display = 'none';
+                showProfile();
+            }, 2000);
+        });
+
+        // Xử lý form quên mật khẩu
+        forgotFormEl.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('forgot-email').value;
+            
+            forgotSuccess.style.display = 'none';
+            forgotError.style.display = 'none';
+            
+            const user = users.find(u => u.email === email);
+            
+            if (!user) {
+                forgotError.textContent = 'Email không tồn tại trong hệ thống!';
+                forgotError.style.display = 'block';
+                return;
+            }
+            
+            forgotSuccess.style.display = 'block';
+            forgotFormEl.reset();
+            
+            setTimeout(() => {
+                forgotForm.style.display = 'none';
+                loginForm.style.display = 'block';
+            }, 3000);
+        });
+
+        // Hiệu ứng nền thay đổi màu sắc nhẹ
+        function changeBackground() {
+            const colors = [
+                'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+                'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%)',
+                'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)',
+                'linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%)'
+            ];
+            
+            let currentIndex = 0;
+            
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % colors.length;
+                document.body.style.background = colors[currentIndex];
+            }, 10000);
+        }
+        
+        changeBackground();
+    </script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kingdom Sport</title>
+    <style>
+         body { 
+           
+         
+           background-size: cover; 
+           background-repeat: no-repeat; 
+           background-position: center; 
+           font-family: Arial, sans-serif; padding: 20px; margin: 0; 
+       }
+        h1{
+            font-family: 'Times New Roman', Times, serif;
+            color:rgb(8, 8, 8);
+            font-size: 30px;
+        }
+        p{
+            font-family: 'Times New Roman', Times, serif;
+            color:rgb(17, 17, 17);
+            font-size: larger;
+
+        }
+       nav { 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2f2d2d;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+       ul { 
+           list-style: none; margin: 0; padding: 0; display: flex; 
+       }
+       li { 
+           margin-right: 20px; position: relative; 
+       }
+       a { 
+           color: rgb(244, 241, 241); text-decoration: none; font-size: 18px; padding: 8px 12px;
+        }
+       a:hover { 
+           background-color: #0056b3; border-radius: 5px; 
+       }
+       .dropdown { 
+           display: none; position: absolute; background: white; box-shadow: 0 0 5px #aaa; 
+       }
+       .dropdown a { 
+           display: block; color: black; padding: 8px; 
+       }
+       .dropdown a:hover { 
+           background-color: #ddd; 
+       }
+       li:hover .dropdown { 
+           display: block; 
+       }
+       .sub-dropdown { 
+           display: none; position: absolute; left: 100%; top: 0; background: white; box-shadow: 0 0 5px #aaa; 
+       }
+       
+       /*css nút hotline*/
+       .hotline-btn {
+    position: fixed;
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 20px;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+    left: 20px; /* Đặt cả 2 nút bên trái */
+}
+
+.hotline-btn img {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+/* Nút điện thoại */
+.hotline-btn.phone {
+    bottom: 20px;
+    background: #e53935;
+    animation: phonePulse 1.5s infinite;
+}
+
+/* Nút Zalo */
+.hotline-btn.zalo {
+    bottom: 80px; /* Đặt cao hơn nút điện thoại */
+    background: #06C;
+    animation: zaloPulse 2s infinite;
+}
+
+/* Hiệu ứng riêng cho nút điện thoại */
+@keyframes phonePulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(229, 57, 53, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(229, 57, 53, 0);
+    }
+}
+
+/* Hiệu ứng riêng cho nút Zalo */
+@keyframes zaloPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 102, 204, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 102, 204, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 102, 204, 0);
+    }
+}
+
+/* Hiệu ứng khi hover */
+.hotline-btn:hover {
+    transform: scale(1.05);
+}
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Trang chủ</a></li>
+            <li><a href="introduction.html">Giới thiệu</a></li>
+ 
+            <li>
+                <a href="#">Sản phẩm</a>
+                <ul class="dropdown">
+                    <li><a href="#" onclick="filterCategory('featured')">Dụng cụ nổi bật</a></li>
+                    <li><a href="#" onclick="filterCategory('yoga')">Dụng cụ Yoga</a></li>
+                    <li>
+                        <a href="#">Môn thể thao ▾</a>
+                        <ul class="sub-dropdown">
+                            <li><a href="#" onclick="filterCategory('badminton')">Cầu lông</a></li>
+                            <li><a href="#" onclick="filterCategory('football')">Bóng đá</a></li>
+                            <li><a href="#" onclick="filterCategory('tabletennis')">Bóng bàn</a></li>
+                            <li><a href="#" onclick="filterCategory('volleyball')">Bóng chuyền</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="khuyenmai.html">Khuyến mãi</a></li>
+        <li><a href="lienhe.html">Liên hệ</a></li>
+        <ul class="nav-right">
+        <li class="cart-icon">
+            <div>
+                🛒 <a href="cart.html" onclick="showCart()">Giỏ hàng <span id="cart-count"></span></a>
+              </div>
+      </ul>
+      <li><a href="login.html">Đăng nhập</a></li>
+    </nav>
+<h1>Giới thiệu</h1>
+<p>Các hoạt động của SPORT sẽ không ngừng phát triển. Chất lượng sản phẩm và dịch vụ thể thao của chúng tôi không nằm ngoài mục đích đem lại cho mọi người sự hăng say và một sức mới trong cuộc sống.</p>
+<p>SPORT bắt đầu thành lập năm 2008, SPORT đến với lĩnh vực thể thao bằng tất cả nhiệt huyết vào các môn Bóng đá, Tennis, Cầu lông,... Cùng với dịch vụ in ấn chuyên nghiệp trên mọi chất liệu được chúng tôi áp dụng với các công nghệ mới nhất hiện nay. Chúng tôi tin rằng sẽ là người bạn đồng hành cùng các bạn trên con đường chinh phục 4S.</p>
+<ul>
+    <li><p>S = Speed</p></li>
+    <li><p>S = Strong</p></li>
+    <li><p>S = Success</p></li>
+    <li><p>S = Style</p></li>
+</ul>
+<p>SPORT đã có hơn 10 năm trong lĩnh vực cung cấp các mặt hàng thời trang thể thao và là thương hiệu uy tín được đông đảo khách hàng ủng hộ.</p>
+<p>Nguồn cung cấp hàng chủ yếu là những công ty uy tín và thương hiệu tại Việt Nam nên quý khách hàng có thể yên tâm hoàn toàn trong quá trình sử dụng. Khách hàng đã và đang sử dụng sản phẩm, dịch vụ của SPORT là những khách hàng thân thuộc và gắn bó với SPORT.</p>
+<p>Hiện tại, SPORT đang cung cấp áo đá banh nam nữ (hàng có sẵn và đặt hàng), giày thể thao các loại, các máy tập thể thao, đồ cầu lông,... với giá cả cạnh tranh.</p>
+<p><b>Với khách hàng:</b> SPORT là sự lựa chọn cân bằng về giá cả và chất lượng.</p>
+<p><b>Với nhà cung cấp:</b> SPORT là đối tác thành công.</p>
+
+<div class="hotline-buttons">
+    <a href="https://zalo.me/so-dien-thoai" target="_blank" class="hotline-btn zalo">
+        <img src="image/zalo.png" alt="Zalo"> 0898413863
+    </a>
+    <a href="tel:0823885888" class="hotline-btn phone">
+        <img src="image/dt.jpg" alt="Phone"> 0762688939
+    </a>
+</div>
+</body>
+</html>

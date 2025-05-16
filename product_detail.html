@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết sản phẩm</title>
+    <style>
+        .review-section {
+          margin-top: 30px;
+          padding: 15px;
+          background: rgba(255, 255, 255, 0.8);
+          border-radius: 8px;
+        }
+        .rating {
+          margin: 10px 0;
+        }
+        .star {
+          font-size: 24px;
+          color: #ccc;
+          cursor: pointer;
+        }
+        .star.active {
+          color: #ffb800;
+        }
+        textarea {
+          width: 100%;
+          height: 100px;
+          margin: 10px 0;
+          padding: 10px;
+          border-radius: 5px;
+          border: 1px solid #ddd;
+        }
+        input[type="text"] {
+          width: 100%;
+          margin: 10px 0;
+          padding: 10px;
+          border-radius: 5px;
+          border: 1px solid #ddd;
+        }
+        #reviews-container {
+          margin-top: 20px;
+        }
+        .review-item {
+          background: white;
+          padding: 10px;
+          margin-bottom: 10px;
+          border-radius: 5px;
+          border-left: 3px solid #1458d4;
+        }
+      </style>
+</head>
+<body>
+    <h1>Thông tin sản phẩm</h1>
+    <div id="product-detail"></div>
+    <div class="review-section">
+        <h3>Đánh giá sản phẩm</h3>
+        <div class="rating">
+          <span class="star" data-value="1">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="5">★</span>
+          <span id="rating-value">(0/5)</span>
+        </div>
+        <input type="text" id="reviewer-name" placeholder="Nhập tên của bạn...">
+        <textarea id="review-text" placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này..."></textarea>
+        <button id="submit-review">Gửi đánh giá</button>
+        
+        <div id="reviews-container">
+          <!-- Đánh giá sẽ được hiển thị ở đây -->
+        </div>
+      </div>
+    <script>
+        let product = JSON.parse(localStorage.getItem("product"));
+
+        if (product) {
+            document.getElementById("product-detail").innerHTML = `
+                <img src="${product.image}" alt="${product.name}" width="300">
+                <h2>${product.name}</h2>
+                <p>Giá: ${product.price.toLocaleString()}đ</p>
+                <p>${product.description}</p>
+                 <button onclick="addToCart()">Thêm vào giỏ hàng</button>
+                <br><br>
+                <a href="index.html">Quay lại</a>
+            `;
+        } else {
+            document.getElementById("product-detail").innerHTML = "<p>Không tìm thấy sản phẩm</p>";
+            document.querySelector("button").style.display = "none";
+        }
+        function addToCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const productIndex = cart.findIndex(item => item.name === product.name);
+
+            if (productIndex !== -1) {
+                cart[productIndex].quantity += 1;
+            } else {
+                product.quantity = 1; 
+                cart.push(product);
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+            alert(`${product.name} đã được thêm vào giỏ hàng!`);}
+             // Thêm vào script của product_detail.html
+  document.addEventListener('DOMContentLoaded', function() {
+    // Xử lý đánh giá sao
+    const stars = document.querySelectorAll('.star');
+    let rating = 0;
+    
+    stars.forEach(star => {
+      star.addEventListener('click', function() {
+        rating = parseInt(this.getAttribute('data-value'));
+        document.getElementById('rating-value').textContent = `(${rating}/5)`;
+        
+        // Cập nhật giao diện sao
+        stars.forEach(s => {
+          if (parseInt(s.getAttribute('data-value')) <= rating) {
+            s.classList.add('active');
+          } else {
+            s.classList.remove('active');
+          }
+        });
+      });
+    });
+    
+    // Xử lý gửi đánh giá
+    document.getElementById('submit-review').addEventListener('click', 
+    function() {
+      const reviewerName = document.getElementById('reviewer-name').value;
+      const reviewText = document.getElementById('review-text').value;
+      const productId = product.name; // Sử dụng tên sản phẩm làm ID
+      if (reviewerName.trim() === '') {
+        alert('Vui lòng nhập tên của bạn!');
+        return;
+                }
+      if (rating === 0) {
+        alert('Vui lòng chọn số sao đánh giá!');
+        return;
+      }
+      
+      if (reviewText.trim() === '') {
+        alert('Vui lòng nhập nội dung đánh giá!');
+        return;
+      }
+      
+      // Lưu đánh giá vào localStorage
+      saveReview(productId, rating, reviewText,reviewerName);
+      
+      // Hiển thị đánh giá
+      displayReviews(productId);
+      
+      // Reset form
+      document.getElementById('reviewer-name').value = '';
+      document.getElementById('review-text').value = '';
+      stars.forEach(s => s.classList.remove('active'));
+      rating = 0;
+      document.getElementById('rating-value').textContent = '(0/5)';
+    });
+    
+    // Hiển thị đánh giá đã có
+    if (product) {
+      displayReviews(product.name);
+    }
+  });
+  
+  function saveReview(productId, rating, text,reviewerName) {
+    const reviews = JSON.parse(localStorage.getItem('productReviews')) || {};
+    
+    if (!reviews[productId]) {
+      reviews[productId] = [];
+    }
+    
+    const review = {
+      rating: rating,
+      text: text,
+      reviewerName: reviewerName,
+      date: new Date().toLocaleDateString('vi-VN')
+    };
+    
+    reviews[productId].push(review);
+    localStorage.setItem('productReviews', JSON.stringify(reviews));
+  }
+  
+  function displayReviews(productId) {
+    const container = document.getElementById('reviews-container');
+    const reviews = JSON.parse(localStorage.getItem('productReviews')) || {};
+    const productReviews = reviews[productId] || [];
+    
+    container.innerHTML = '';
+    
+    if (productReviews.length === 0) {
+      container.innerHTML = '<p>Chưa có đánh giá nào cho sản phẩm này.</p>';
+      return;
+    }
+    
+    productReviews.forEach(review => {
+      const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+      
+      const reviewItem = document.createElement('div');
+      reviewItem.className = 'review-item';
+      reviewItem.innerHTML = `
+        <div class="review-stars">${stars}</div>
+        <div class="reviewer-name"><strong>${review.reviewerName}</strong></div>
+        <div class="review-text">${review.text}</div>
+        <div class="review-date">Đăng ngày: ${review.date}</div>
+      `;
+      
+      container.appendChild(reviewItem);
+    });
+  }
+   
+    </script>
+</body>
+</html>

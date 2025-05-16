@@ -1,0 +1,393 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+
+
+ul { 
+    list-style: none; margin: 0; padding: 0; display: flex; 
+}
+li { 
+    margin-right: 20px; position: relative; 
+}
+a { 
+    color: white; text-decoration: none; font-size: 18px; padding: 8px 12px;
+ }
+a:hover { 
+    background-color: #0056b3; border-radius: 5px; 
+}
+.dropdown { 
+    display: none; position: absolute; background: white; box-shadow: 0 0 5px #aaa; 
+}
+.dropdown a { 
+    display: block; color: black; padding: 8px; 
+}
+.dropdown a:hover { 
+    background-color: #ddd; 
+}
+li:hover .dropdown { 
+    display: block; 
+}
+.sub-dropdown { 
+    display: none; position: absolute; left: 100%; top: 0; background: white; box-shadow: 0 0 5px #aaa; 
+}
+.dropdown li:hover .sub-dropdown { 
+    display: block; 
+}
+header { 
+    display: flex; justify-content: space-between; align-items: center;  width: 100%;
+}
+input { 
+    padding: 5px;
+ }
+aside { 
+    margin: 20px 0; 
+}
+main { 
+    display: flex; flex-wrap: wrap; gap: 20px; 
+}
+.product { 
+     border: 1px solid #ccc; 
+     padding: 20px; 
+     width: 250px;   /* tăng từ 200px lên 250px hoặc hơn nếu muốn */
+     text-align: center; 
+     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+     background: white;
+     border-radius: 10px;
+     transition: transform 0.3s;
+}   
+.product:hover {
+     transform: scale(1.05);
+}
+.product img { 
+     width: 100%;        /* dùng 100% để ảnh vừa khít khung */
+     height: auto; 
+     max-height: 220px;  /* đặt giới hạn chiều cao để ảnh không bị vỡ */
+     object-fit: cover;
+     border-radius: 8px;
+}
+#product-list {
+display: flex;
+flex-wrap: wrap;
+gap: 30px;
+justify-content: center;
+}
+
+.cart-text { 
+    display: none; position: absolute; top: 30px; left: 50%; transform: translateX(-50%); background: white; padding: 5px 10px; border: 1px solid #ccc; box-shadow: 0 0 5px #aaa; white-space: nowrap; }
+.cart-icon:hover .cart-text { 
+    display: block; 
+}
+.nav-right { 
+    margin-left: auto; display: flex;
+}
+#product-section h2 {
+font-size: 24px;
+margin-top: 20px;
+color: #333;
+text-align: center;
+}
+
+.prev, .next {
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+background: rgba(0, 0, 0, 0.5);
+color: white;
+border: none;
+padding: 10px;
+cursor: pointer;
+z-index: 20;
+}
+
+.prev { left: 10px; }
+.next { right: 10px; }
+ @media (max-width: 768px) {
+    ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    .dropdown, .sub-dropdown {
+        position: static;
+        box-shadow: none;
+        display: none;
+    }
+    li:hover .dropdown, .dropdown li:hover .sub-dropdown {
+        display: block;
+    }
+}
+/* phần css cho các chức năng */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2f2d2d;
+    padding: 10px 20px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-right {
+    margin-left: auto; 
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-right input#search {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.slider {
+    position: relative;
+    width: 100vw;         /* 100% chiều rộng màn hình */
+    height: 400px;        /* hoặc cao hơn nếu muốn */
+    overflow: hidden;
+    margin: 0 auto;
+}
+  
+.slides {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+  
+.slides img {
+    width: 100vw;         /* chiếm toàn bộ chiều rộng */
+    height: 100%;         /* chiếm toàn bộ chiều cao */
+    object-fit: cover;    /* ảnh phủ đầy khung, không méo */
+    flex-shrink: 0;
+}
+  
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,0.4);
+    color: white;
+    font-size: 28px;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    z-index: 1;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+  
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.6);
+}
+  
+.prev {
+    left: 20px;
+}
+  
+.next {
+    right: 20px;
+}
+
+.filter-price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #333;
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: white;
+}
+  
+.filter-price label {
+    font-size: 14px;
+    color: #fff;
+}
+  
+.filter-price select {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #555;
+    color: #fff;
+    font-size: 14px;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+}
+  
+.filter-price select:hover {
+    background-color: #666;
+}
+  /* css cho phần chi tiết*/
+.product a {
+    display: inline-block;
+}
+
+.product a img {
+    width: 100%;
+    height: auto;
+    border: none;
+    outline: none;
+    transition: transform 0.3s ease;
+}
+
+.product a:hover img {
+    transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi hover */
+}
+
+/*css cho hotline*/
+/* CSS chung cho cả 2 nút */
+.hotline-btn {
+    position: fixed;
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 20px;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+    left: 20px; /* Đặt cả 2 nút bên trái */
+}
+
+.hotline-btn img {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+/* Nút điện thoại */
+.hotline-btn.phone {
+    bottom: 20px;
+    background: #e53935;
+    animation: phonePulse 1.5s infinite;
+}
+
+/* Nút Zalo */
+.hotline-btn.zalo {
+    bottom: 80px; /* Đặt cao hơn nút điện thoại */
+    background: #06C;
+    animation: zaloPulse 2s infinite;
+}
+
+/* Hiệu ứng riêng cho nút điện thoại */
+@keyframes phonePulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(229, 57, 53, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(229, 57, 53, 0);
+    }
+}
+
+/* Hiệu ứng riêng cho nút Zalo */
+@keyframes zaloPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 102, 204, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 102, 204, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 102, 204, 0);
+    }
+}
+
+/* Hiệu ứng khi hover */
+.hotline-btn:hover {
+    transform: scale(1.05);
+}
+
+ /*phần footer*/
+/* Footer Styling */
+.footer {
+    background-color: #111;
+    color: #eee;
+    padding: 50px 20px 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.footer-section {
+    flex: 1 1 220px;
+    margin: 15px;
+}
+
+.footer-section h3,
+.footer-section h4 {
+    color: #fff;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.footer-section p {
+    margin: 5px 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.footer-section ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 0;
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin: 0;
+    white-space: nowrap;
+}
+
+
+.footer-section a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #ffcc00;
+    text-decoration: underline;
+}
+
+.social-links a {
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 30px;
+    border-top: 1px solid #333;
+    padding-top: 15px;
+    font-size: 14px;
+    color: #aaa;
+}

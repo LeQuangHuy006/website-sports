@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khuyến mãi - Kingdom Sport</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(135deg, #e5e7eb, #f3f2f6);
+            font-family: 'Poppins', sans-serif;
+            color: #e0d9d9;
+            padding: 20px;
+            min-height: 100vh;
+            transition: background 0.3s;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1f2937;
+            padding: 15px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        li {
+            position: relative;
+        }
+        a {
+            color: #e6e8ee;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 12px;
+            transition: background 0.3s, color 0.3s;
+        }
+        a:hover {
+            background: #2563eb;
+            border-radius: 8px;
+            color: #fff;
+        }
+        .dropdown {
+            display: none;
+            position: absolute;
+            background: #1f2937;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            top: 100%;
+            left: 0;
+            z-index: 100;
+        }
+        .dropdown a {
+            display: block;
+            padding: 10px 15px;
+            color: #d1d5db;
+        }
+        .dropdown a:hover {
+            background: #374151;
+        }
+        li:hover .dropdown {
+            display: block;
+        }
+        .sub-dropdown {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: #e5e5eb;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+        .dropdown li:hover .sub-dropdown {
+            display: block;
+        }
+        .nav-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .cart-icon {
+            position: relative;
+        }
+        .cart-text {
+            display: none;
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            white-space: nowrap;
+            color: #0b0b0b;
+        }
+        .cart-icon:hover .cart-text {
+            display: block;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+        #search {
+            padding: 12px 20px;
+            font-size: 16px;
+            width: 300px;
+            border: none;
+            border-radius: 25px;
+            background: #f3f4f6;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        #search:focus {
+            outline: none;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 320px;
+        }
+        #search::placeholder {
+            color: #6b7280;
+            font-style: italic;
+        }
+        .search-button {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .search-button:hover {
+            background: #1d4ed8;
+        }
+        .carousel-container {
+            position: relative;
+            width: 800px;
+            height: 400px;
+            overflow: hidden;
+            margin: 30px auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .carousel-item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.8s, transform 0.8s;
+            opacity: 0;
+            transform: translateX(100%);
+            z-index: 1;
+        }
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+        .carousel-item.active {
+            opacity: 1;
+            transform: translateX(0);
+            z-index: 10;
+        }
+        .carousel-img-wrapper {
+            position: relative;
+            border: none;
+        }
+        .hot-label {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ef4444;
+            color: #fff;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            z-index: 20;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: background 0.3s;
+        }
+        .prev:hover, .next:hover {
+            background: #1d4ed8;
+        }
+        .prev { left: 15px; }
+        .next { right: 15px; }
+        .product, .combo {
+            border: 2px solid #2563eb;
+            padding: 15px;
+            width: 220px;
+            text-align: center;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .product:hover, .combo:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        .product img, .combo img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .discount-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #f97316;
+            color: #060606;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .flash-sale {
+            background: linear-gradient(45deg, #ef4444, #f97316);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        .countdown {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1b1818;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .voucher {
+            border: 2px dashed #2563eb;
+            padding: 15px;
+            margin: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #68aae3;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .voucher button {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .voucher button:hover {
+            background: #1d4ed8;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .modal-content h2 {
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+        .modal-content button {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .modal-content button:hover {
+            background: #1d4ed8;
+        }
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #1f2937;
+        }
+        .share-button {
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        .share-button:hover {
+            background: #059669;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+            ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .dropdown, .sub-dropdown {
+                position: static;
+                box-shadow: none;
+                display: none;
+                background: #374151;
+            }
+            li:hover .dropdown, .dropdown li:hover .sub-dropdown {
+                display: block;
+            }
+            #search {
+                width: 200px;
+            }
+            #search:focus {
+                width: 220px;
+            }
+            .carousel-container {
+                width: 100%;
+                height: 250px;
+            }
+            .product, .combo {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+        <ul>
+            <li><a href="index.html">Trang chủ</a></li>
+            <li><a href="introduction.html">Giới thiệu</a></li>
+            <li>
+                <a href="#">Sản phẩm</a>
+                <ul class="dropdown">
+                    <li><a href="#" onclick="filterCategory('featured')">Dụng cụ nổi bật</a></li>
+                    <li><a href="#" onclick="filterCategory('yoga')">Dụng cụ Yoga</a></li>
+                    <li>
+                        <a href="#">Môn thể thao ▾</a>
+                        <ul class="sub-dropdown">
+                            <li><a href="#" onclick="filterCategory('badminton')">Cầu lông</a></li>
+                            <li><a href="#" onclick="filterCategory('football')">Bóng đá</a></li>
+                            <li><a href="#" onclick="filterCategory('tabletennis')">Bóng bàn</a></li>
+                            <li><a href="#" onclick="filterCategory('volleyball')">Bóng chuyền</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="khuyenmai.html">Khuyến mãi</a></li>
+            <li><a href="lienhe.html">Liên hệ</a></li>
+        </ul>
+        </div>
+        <div class="nav-right">
+    <ul>
+            <li class="cart-icon">
+                <div>
+                    🛒 <a href="#" onclick="showCartModal()">Giỏ hàng <span id="cart-count"></span></a>
+                    <span class="cart-text">Xem giỏ hàng</span>
+                </div>
+            </li>
+            <li><a href="login.html">Đăng nhập</a></li>
+        </ul>
+        </div>
+    </nav>
+    <header>
+        <h1 style="color: #111010; font-size: 32px; font-weight: 700;">👑 KINGDOM SPORT</h1>
+        <div class="search-container">
+            <input type="text" id="search" placeholder="Tìm kiếm sản phẩm, combo, voucher...">
+            <button class="search-button" onclick="searchProducts()">Tìm</button>
+        </div>
+    </header>
+
+    <!-- Poster khuyến mãi động -->
+    <div class="carousel-container">
+        <button class="prev" onclick="movePosterSlide(-1)">←</button>
+        <div class="carousel" id="poster-carousel">
+            <div class="carousel-item active">
+                <div class="carousel-img-wrapper">
+                    <img src="image/khuyến mãi lớn.png" alt="Khuyến mãi lớn">
+                    <div class="hot-label">SALE LỚN</div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="carousel-img-wrapper">
+                    <img src="image/plas sale.png" alt="Flash Sale">
+                    <div class="hot-label">FLASH SALE</div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="carousel-img-wrapper">
+                    <img src="image/combo vip.png" alt="Combo ưu đãi">
+                    <div class="hot-label">COMBO SIÊU TIẾT KIỆM</div>
+                </div>
+            </div>
+        </div>
+        <button class="next" onclick="movePosterSlide(1)">→</button>
+    </div>
+
+    <!-- Flash Sale -->
+    <section class="flash-sale fade-in">
+        <h2 style="color: #101010; text-align: center; font-size: 28px; font-weight: 700;">Flash Sale - Chỉ trong 24h!</h2>
+        <div class="countdown" id="countdown">00:00:00</div>
+        <main id="flash-sale-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;"></main>
+    </section>
+
+    <!-- Combo khuyến mãi -->
+    <section id="combo-section" class="fade-in">
+        <h2 style="color: #020202; text-align: center; font-size: 28px; font-weight: 700;">Combo ưu đãi</h2>
+        <main id="combo-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;"></main>
+    </section>
+
+    <!-- Sản phẩm khuyến mãi -->
+    <section id="promotion-section" class="fade-in">
+        <h2 style="color: #111010; text-align: center; font-size: 28px; font-weight: 700;">Sản phẩm khuyến mãi</h2>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <label for="discount-filter" style="color: #0d0c0c; font-size: 18px;">Lọc theo mức giảm:</label>
+            <select id="discount-filter" onchange="filterByDiscount()" style="padding: 8px; font-size: 16px; border-radius: 5px;">
+                <option value="all">Tất cả</option>
+                <option value="10-20">Giảm 10-20%</option>
+                <option value="20+">Giảm trên 20%</option>
+            </select><br>
+            <label for="category-filter" style="color: #1e1b1b; font-size: 18px; margin-left: 20px;">Lọc theo danh mục:</label>
+            <select id="category-filter" onchange="filterByDiscount()" style="padding: 8px; font-size: 16px; border-radius: 5px;">
+                <option value="all">Tất cả</option>
+                <option value="featured">Nổi bật</option>
+                <option value="yoga">Yoga</option>
+                <option value="badminton">Cầu lông</option>
+                <option value="football">Bóng đá</option>
+                <option value="tabletennis">Bóng bàn</option>
+                <option value="volleyball">Bóng chuyền</option>
+            </select>
+        </div>
+        <main id="promotion-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;"></main>
+    </section>
+
+    <!-- Voucher -->
+    <section id="voucher-section" class="fade-in">
+        <h2 style="color: #221f1f; text-align: center; font-size: 28px; font-weight: 700;">Mã giảm giá</h2>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <input type="text" id="voucher-code" placeholder="Nhập mã giảm giá" style="padding: 10px; width: 200px; border-radius: 5px;">
+            <button onclick="applyVoucher()" style="padding: 10px 20px; background: #2563eb; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Áp dụng</button>
+        </div>
+        <div id="voucher-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px;"></div>
+    </section>
+
+    <!-- Modal giỏ hàng -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeCartModal()">×</span>
+            <h2>Giỏ hàng của bạn</h2>
+            <div id="cart-items"></div>
+            <p id="cart-total" style="font-size: 18px; font-weight: 600; margin-top: 20px;">Tổng cộng: 0đ</p>
+            <button onclick="clearCart()">Xóa giỏ hàng</button>
+            <button onclick="window.location.href='checkout.html'">Thanh toán</button>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            { name: "Giày cầu lông kawa", price: 2500000, image: "image/giaykawwa.jpg", category: "featured", description: "Giày cầu lông chất lượng cao, bền bỉ và êm chân.", discount: 15, flashSale: true, saleEndTime: new Date().getTime() + 24 * 60 * 60 * 1000 },
+            { name: "Bộ thể thao cao cấp", price: 900000, image: "image/bộ thể thao.webp", category: "football", description: "Bộ thể thao thoáng khí, phù hợp với mọi hoạt động thể thao.", discount: 10, flashSale: false },
+            { name: "Thảm tập Yoga cao cấp", price: 800000, image: "image/thảm.webp", category: "yoga", description: "Thảm yoga dày dặn, bền và chống trơn trượt.", discount: 20, flashSale: true, saleEndTime: new Date().getTime() + 24 * 60 * 60 * 1000 },
+            { name: "Vợt cầu lông Yonex", price: 1300000, image: "image/vợt.webp", category: "badminton", description: "Vợt Yonex chất lượng cao, nhẹ và dễ sử dụng.", discount: 0, flashSale: false },
+            { name: "Giày đá bóng Nike", price: 1399000, image: "image/nike.webp", category: "football", description: "Giày đá bóng Nike giúp tăng cường sự thoải mái và hiệu suất.", discount: 10, flashSale: false },
+            { name: "Bàn bóng bàn Thiên Trường", price: 3700000, image: "image/ban-bong-ban-thien-truong-pt-02(1).jpg", category: "tabletennis", description: "Bàn bóng bàn chất lượng cao, phù hợp cho các giải đấu chuyên nghiệp.", discount: 5, flashSale: false },
+            { name: "Quả bóng chuyền Mikasa", price: 2000000, image: "image/bongchuyen.webp", category: "volleyball", description: "Quả bóng chuyền Mikasa bền bỉ, thích hợp cho các trận đấu ngoài trời.", discount: 15, flashSale: true, saleEndTime: new Date().getTime() + 24 * 60 * 60 * 1000 }
+        ];
+
+        const combos = [
+            { name: "Combo Cầu lông", products: ["Vợt cầu lông Yonex", "Giày cầu lông kawa"], price: 3500000, originalPrice: 3800000, image: "image/combo caulong.webp", discount: 8 },
+            { name: "Combo Thể thao bóng đá", products: ["Giày đá bóng Nike", "Bộ thể thao cao cấp"], price: 1500000, originalPrice: 1700000, image: "image/combo thethao.webp", discount: 12 }
+        ];
+
+        const vouchers = [
+            { code: "SPORT10", discount: 10, minOrder: 1000000 },
+            { code: "FREESHIP", discount: 50000, minOrder: 500000 }
+        ];
+
+        // Poster carousel
+        window.onload = function () {
+            let posterIndex = 0;
+            const posterItems = document.querySelectorAll("#poster-carousel .carousel-item");
+            let posterInterval;
+            function updatePosterCarousel() {
+                posterItems.forEach((item, i) => {
+                    item.classList.remove("active");
+                    item.style.opacity = i === posterIndex ? "1" : "0";
+                    item.style.transform = i === posterIndex ? "translateX(0)" : "translateX(100%)";
+                });
+                posterItems[posterIndex].classList.add("active");
+            }
+            function movePosterSlide(step) {
+                posterIndex += step;
+                if (posterIndex < 0) posterIndex = posterItems.length - 1;
+                if (posterIndex >= posterItems.length) posterIndex = 0;
+                updatePosterCarousel();
+                restartPosterInterval();
+            }
+            function restartPosterInterval() {
+                clearInterval(posterInterval);
+                posterInterval = setInterval(() => movePosterSlide(1), 3000);
+            }
+            document.querySelector(".prev").addEventListener("click", () => movePosterSlide(-1));
+            document.querySelector(".next").addEventListener("click", () => movePosterSlide(1));
+            updatePosterCarousel();
+            restartPosterInterval();
+
+            // Flash Sale countdown
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const endTime = products.find(p => p.flashSale)?.saleEndTime || now;
+                const distance = endTime - now;
+                if (distance < 0) {
+                    document.getElementById("countdown").innerText = "Hết thời gian!";
+                    return;
+                }
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                document.getElementById("countdown").innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            setInterval(updateCountdown, 1000);
+
+            // Hiển thị ban đầu
+            displayFlashSale();
+            displayCombos();
+            displayDiscountedProducts(products);
+            displayVouchers();
+            updateCartCount();
+        };
+
+        // Flash Sale
+        function displayFlashSale() {
+    const flashSaleList = document.getElementById("flash-sale-list");
+    flashSaleList.innerHTML = "";
+    products.forEach((product, index) => {
+        if (product.flashSale) {
+            const originalPrice = Math.round(product.price / (1 - product.discount / 100));
+            const productDiv = document.createElement("div");
+            productDiv.className = "product fade-in";
+            productDiv.innerHTML = `
+                <div class="discount-label">-${product.discount}%</div>
+                <img src="${product.image}" alt="${product.name}">
+                <h2 style="color: #1f2937; font-size: 18px; font-weight: 600;">${product.name}</h2>
+                <p style="color: #6b7280;">Giá gốc: ${originalPrice.toLocaleString()}đ</p>
+                <p style="color: #ef4444; font-weight: 600;">Giá giảm: ${product.price.toLocaleString()}đ</p>
+                <button onclick="addToCart(${index})">Thêm vào giỏ</button>
+                <button onclick="viewProduct('${product.name}', ${product.price}, '${product.image}', '${product.description || ''}')">Chi tiết</button>
+                <button class="share-button" onclick="shareProduct('${product.name}', '${product.image}')">Chia sẻ</button>
+            `;
+            flashSaleList.appendChild(productDiv);
+        }
+    });
+}
+        // Combo
+        function displayCombos() {
+            const comboList = document.getElementById("combo-list");
+            comboList.innerHTML = "";
+            combos.forEach((combo, index) => {
+                const comboDiv = document.createElement("div");
+                comboDiv.className = "combo fade-in";
+                comboDiv.innerHTML = `
+                    <div class="discount-label">Tiết kiệm ${combo.discount}%</div>
+                    <img src="${combo.image}" alt="${combo.name}">
+                    <h2 style="color: #1f2937; font-size: 18px; font-weight: 600;">${combo.name}</h2>
+                    <p style="color: #6b7280;">Giá gốc: ${combo.originalPrice.toLocaleString()}đ</p>
+                    <p style="color: #ef4444; font-weight: 600;">Giá combo: ${combo.price.toLocaleString()}đ</p>
+                    <button onclick="addComboToCart(${index})">Thêm vào giỏ</button>
+                    <button class="share-button" onclick="shareProduct('${combo.name}', '${combo.image}')">Chia sẻ</button>
+                `;
+                comboList.appendChild(comboDiv);
+            });
+        }
+
+        // Sản phẩm khuyến mãi
+       function displayDiscountedProducts(productArray) {
+    const promotionList = document.getElementById("promotion-list");
+    promotionList.innerHTML = "";
+    productArray.forEach((product, index) => {
+        if (product.discount > 0) {
+            const originalPrice = Math.round(product.price / (1 - product.discount / 100));
+            const productDiv = document.createElement("div");
+            productDiv.className = "product fade-in";
+            productDiv.innerHTML = `
+                <div class="discount-label">-${product.discount}%</div>
+                <img src="${product.image}" alt="${product.name}">
+                <h2 style="color: #1f2937; font-size: 18px; font-weight: 600;">${product.name}</h2>
+                <p style="color: #6b7280;">Giá gốc: ${originalPrice.toLocaleString()}đ</p>
+                <p style="color: #ef4444; font-weight: 600;">Giá giảm: ${product.price.toLocaleString()}đ</p>
+                <button onclick="addToCart(${index})">Thêm vào giỏ</button>
+                <button onclick="viewProduct('${product.name}', ${product.price}, '${product.image}', '${product.description || ''}')">Chi tiết</button>
+                <button class="share-button" onclick="shareProduct('${product.name}', '${product.image}')">Chia sẻ</button>
+            `;
+            promotionList.appendChild(productDiv);
+        }
+    });
+}
+
+        // Voucher
+        function displayVouchers() {
+            const voucherList = document.getElementById("voucher-list");
+            voucherList.innerHTML = "";
+            vouchers.forEach(voucher => {
+                const voucherDiv = document.createElement("div");
+                voucherDiv.className = "voucher fade-in";
+                voucherDiv.innerHTML = `
+                    <div>
+                        <strong>${voucher.code}</strong><br>
+                        Giảm ${voucher.discount > 1000 ? voucher.discount.toLocaleString() + 'đ' : voucher.discount + '%'} cho đơn từ ${voucher.minOrder.toLocaleString()}đ
+                    </div>
+                    <button onclick="copyVoucher('${voucher.code}')">Sao chép</button>
+                `;
+                voucherList.appendChild(voucherDiv);
+            });
+        }
+
+        function copyVoucher(code) {
+            navigator.clipboard.write(code);
+            alert(`Đã sao chép mã: ${code}`);
+        }
+
+        function applyVoucher() {
+    const code = document.getElementById("voucher-code").value.trim();
+    const voucher = vouchers.find(v => v.code === code);
+    if (!voucher) {
+        alert("Mã không hợp lệ!");
+        return;
+    }
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    if (total < voucher.minOrder) {
+        alert(`Đơn hàng cần tối thiểu ${voucher.minOrder.toLocaleString()}đ để áp dụng mã.`);
+        return;
+    }
+    localStorage.setItem("appliedVoucher", JSON.stringify(voucher));
+    alert(`Áp dụng mã ${voucher.code} thành công!`);
+    updateCartModal(); // Nếu có hàm cập nhật lại tổng tiền hiển thị
+}
+
+
+        // Giỏ hàng
+        function addToCart(index) {
+            const product = products[index];
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const cartItem = cart.find(item => item.name === product.name);
+            if (cartItem) {
+                cartItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartCount();
+            alert(`${product.name} đã được thêm vào giỏ hàng!`);
+        }
+
+        function addComboToCart(index) {
+            const combo = combos[index];
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            combo.products.forEach(productName => {
+                const product = products.find(p => p.name === productName);
+                if (product) {
+                    const cartItem = cart.find(item => item.name === product.name);
+                    if (cartItem) {
+                        cartItem.quantity += 1;
+                    } else {
+                        cart.push({ ...product, quantity: 1 });
+                    }
+                }
+            });
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartCount();
+            alert(`${combo.name} đã được thêm vào giỏ hàng!`);
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById("cart-count").textContent = totalQuantity;
+        }
+
+        function showCartModal() {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const cartItems = document.getElementById("cart-items");
+            cartItems.innerHTML = "";
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price * item.quantity;
+                const itemDiv = document.createElement("div");
+                itemDiv.style = "display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #e5e7eb;";
+                itemDiv.innerHTML = `
+                    <div>
+                        <strong>${item.name}</strong><br>
+                        ${item.price.toLocaleString()}đ x 
+                        <input type="number" value="${item.quantity}" min="1" style="width: 60px; padding: 5px;" onchange="updateCartItem(${index}, this.value)">
+                    </div>
+                    <div>
+                        ${(item.price * item.quantity).toLocaleString()}đ
+                        <button onclick="removeCartItem(${index})">Xóa</button>
+                    </div>
+                `;
+                cartItems.appendChild(itemDiv);
+            });
+            document.getElementById("cart-total").textContent = `Tổng cộng: ${total.toLocaleString()}đ`;
+            document.getElementById("cart-modal").style.display = "flex";
+        }
+
+        function updateCartItem(index, quantity) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart[index].quantity = parseInt(quantity);
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartCount();
+            showCartModal();
+        }
+
+        function removeCartItem(index) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartCount();
+            showCartModal();
+        }
+
+        function clearCart() {
+            localStorage.removeItem("cart");
+            updateCartCount();
+            showCartModal();
+        }
+
+        function closeCartModal() {
+            document.getElementById("cart-modal").style.display = "none";
+        }
+
+        function viewProduct(name, price, image, description) {
+            localStorage.setItem("product", JSON.stringify({ name, price, image, description }));
+            window.location.href = "product_detail.html";
+        }
+
+        function shareProduct(name, image) {
+            const shareData = {
+                title: name,
+                text: `Xem sản phẩm ${name} tại Kingdom Sport!`,
+                url: window.location.href
+            };
+            if (navigator.share) {
+                navigator.share(shareData).catch(err => console.error("Lỗi chia sẻ:", err));
+            } else {
+                alert(`Chia sẻ ${name} qua: ${shareData.url}`);
+            }
+        }
+
+        function filterByDiscount() {
+            const discountFilter = document.getElementById("discount-filter").value;
+            const categoryFilter = document.getElementById("category-filter").value;
+            let filtered = products;
+            if (discountFilter !== "all") {
+                if (discountFilter === "20+") {
+                    filtered = filtered.filter(p => p.discount > 20);
+                } else {
+                    const [min, max] = discountFilter.split("-").map(Number);
+                    filtered = filtered.filter(p => p.discount >= min && p.discount <= max);
+                }
+            }
+            if (categoryFilter !== "all") {
+                filtered = filtered.filter(p => p.category === categoryFilter);
+            }
+            displayDiscountedProducts(filtered);
+        }
+
+   
+
+        // Tìm kiếm nâng cao
+        document.getElementById("search").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                searchProducts();
+            }
+        });
+
+        function searchProducts() {
+            const searchTerm = document.getElementById("search").value.toLowerCase().trim();
+            if (searchTerm === '') {
+                displayDiscountedProducts(products);
+                return;
+            }
+            const results = [
+                ...products.filter(product => 
+                    product.name.toLowerCase().includes(searchTerm) ||
+                    (product.category && product.category.toLowerCase().includes(searchTerm)) ||
+                    (product.description && product.description.toLowerCase().includes(searchTerm)) ||
+                    product.price.toString().includes(searchTerm)
+                ),
+                ...combos.filter(combo => 
+                    combo.name.toLowerCase().includes(searchTerm)
+                ),
+                ...vouchers.filter(voucher => 
+                    voucher.code.toLowerCase().includes(searchTerm)
+                )
+            ];
+            if (results.length === 0) {
+                document.getElementById("promotion-list").innerHTML = `
+                    <div style="width: 100%; text-align: center; padding: 20px; color: #fff;">
+                        <p>Không tìm thấy sản phẩm phù hợp với từ khóa "${searchTerm}"</p>
+                        <p>Vui lòng thử lại với từ khóa khác hoặc xem các gợi ý dưới đây:</p>
+                        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 15px;">
+                            ${generateSearchSuggestions()}
+                        </div>
+                    </div>
+                `;
+            } else {
+                displayDiscountedProducts(results.filter(item => item.category)); // Chỉ hiển thị sản phẩm
+            }
+        }
+
+        function generateSearchSuggestions() {
+            const suggestions = ['cầu lông', 'bóng đá', 'yoga', 'bóng bàn', 'bóng chuyền', 'combo', 'voucher'];
+            return suggestions.map(suggestion => 
+                `<button onclick="document.getElementById('search').value='${suggestion}'; searchProducts();" 
+                    style="background: #2563eb; color: #fff; border: none; padding: 5px 10px; border-radius: 20px; cursor: pointer;">
+                    ${suggestion}
+                </button>`
+            ).join('');
+        }
+        function filterByDiscount() {
+    const discountValue = document.getElementById("discount-filter").value;
+    const categoryValue = document.getElementById("category-filter").value;
+
+    let filtered = products.filter(p => p.discount > 0); // chỉ lọc sản phẩm có khuyến mãi
+
+    // Lọc theo mức giảm giá        
+    if (discountValue === "10-20") {
+        filtered = filtered.filter(p => p.discount >= 10 && p.discount <= 20);
+    } else if (discountValue === "20+") {
+        filtered = filtered.filter(p => p.discount > 20);
+    }
+
+    // Lọc theo danh mục
+    if (categoryValue !== "all") {
+        filtered = filtered.filter(p => p.category === categoryValue);
+    }
+
+    // Hiển thị kết quả lọc
+    displayDiscountedProducts(filtered);
+}
+
+    </script>
+</body>
+</html>
